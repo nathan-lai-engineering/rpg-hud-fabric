@@ -4,16 +4,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.spellcraftgaming.rpghud.gui.hud.element.HudElement;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementAirDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementArmorDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementExperienceDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementFoodDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementHealthDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementHealthMountDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementHotbarDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementJumpBarDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementLevelDefault;
-import net.spellcraftgaming.rpghud.gui.hud.element.defaulthud.HudElementWidgetDefault;
+import net.spellcraftgaming.rpghud.gui.hud.element.modern.HudElementAirModern;
+import net.spellcraftgaming.rpghud.gui.hud.element.modern.HudElementCompassModern;
+import net.spellcraftgaming.rpghud.gui.hud.element.modern.HudElementDetailsModern;
+import net.spellcraftgaming.rpghud.gui.hud.element.modern.HudElementEntityInspectModern;
+import net.spellcraftgaming.rpghud.gui.hud.element.simple.*;
 
 @Environment(value=EnvType.CLIENT)
 public class HudDefault extends HudVanilla {
@@ -24,51 +19,55 @@ public class HudDefault extends HudVanilla {
 
 	@Override
 	public HudElement setElementAir() {
-		return new HudElementAirDefault();
+		return new HudElementAirModern();
 	}
-
 	@Override
-	public HudElement setElementArmor() {
-		return new HudElementArmorDefault();
+	public HudElement setElementDetails() {
+		return new HudElementDetailsModern();
 	}
 
 	@Override
 	public HudElement setElementExperience() {
-		return new HudElementExperienceDefault();
+		return new HudElementExperienceSimple();
 	}
 
 	@Override
-	public HudElement setElementLevel() {
-		return new HudElementLevelDefault();
+	public HudElement setElementArmor() {
+		return new HudElementArmorSimple();
 	}
 
 	@Override
 	public HudElement setElementFood() {
-		return new HudElementFoodDefault();
+		return new HudElementFoodSimple();
 	}
 
 	@Override
 	public HudElement setElementHealth() {
-		return new HudElementHealthDefault();
+		return new HudElementHealthSimple();
 	}
 
 	@Override
 	public HudElement setElementHealthMount() {
-		return new HudElementHealthMountDefault();
+		return new HudElementHealthMountSimple();
 	}
 
 	@Override
-	public HudElement setElementJumpBar() {
-		return new HudElementJumpBarDefault();
+	protected HudElement setElementCompass() {
+		return new HudElementCompassModern();
+	}
+
+	@Override
+	public HudElement setElementLevel() {
+		return new HudElementLevelSimple();
 	}
 
 	@Override
 	public HudElement setElementHotbar() {
-		return new HudElementHotbarDefault();
+		return new HudElementHotbarSimple();
 	}
 
 	@Override
-	public HudElement setElementWidget() {
-		return new HudElementWidgetDefault();
+	protected HudElement setElementEntityInspect() {
+		return new HudElementEntityInspectModern();
 	}
 }

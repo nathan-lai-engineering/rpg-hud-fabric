@@ -1,6 +1,4 @@
-package net.spellcraftgaming.rpghud.gui.hud.element.texture;
-
-import com.mojang.blaze3d.systems.RenderSystem;
+package net.spellcraftgaming.rpghud.gui.hud.element.simple;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,29 +11,32 @@ import net.spellcraftgaming.rpghud.gui.hud.element.HudElementType;
 import net.spellcraftgaming.rpghud.settings.Settings;
 
 @Environment(value=EnvType.CLIENT)
-public class HudElementFoodTexture extends HudElement {
+public class HudElementFoodSimple extends HudElement {
 
-	public HudElementFoodTexture() {
+	public HudElementFoodSimple() {
 		super(HudElementType.FOOD, 0, 0, 0, 0, true);
-		parent = HudElementType.WIDGET;
 	}
 
 	@Override
 	public boolean checkConditions() {
 		return this.mc.interactionManager.hasStatusBars();
 	}
-
+	
 	@Override
 	public void drawElement(DrawContext dc, float zLevel, float partialTicks, int scaledWidth, int scaledHeight) {
-		RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 		HungerManager stats = this.mc.player.getHungerManager();
 		int stamina = stats.getFoodLevel();
 		int staminaMax = 20;
-		int posX = (this.settings.getBoolValue(Settings.render_player_face) ? 49 : 25) + this.settings.getPositionValue(Settings.hunger_position)[0];
-		int posY = (this.settings.getBoolValue(Settings.render_player_face) ? 22 : 18) + this.settings.getPositionValue(Settings.hunger_position)[1];
+		int width = 84;
+		
+		int posX = ((scaledWidth) / 2) + 7 + this.settings.getPositionValue(Settings.hunger_position)[0];
+		int posY = scaledHeight - 32 - 8 + this.settings.getPositionValue(Settings.hunger_position)[1];
+		
+		
 		ItemStack itemMain = this.mc.player.getMainHandStack();
 		ItemStack itemSec = this.mc.player.getOffHandStack();
-
+		
+		drawRect(dc, posX, posY, width, 8, 0xA0000000);
 		if (stats.isNotFull() && this.settings.getBoolValue(Settings.show_hunger_preview)) {
 			float value = 0;
 			if (itemMain != ItemStack.EMPTY && itemMain.getItem().getFoodComponent() != null) {
@@ -47,20 +48,22 @@ public class HudElementFoodTexture extends HudElement {
 				int bonusHunger = (int) (value + stamina);
 				if (bonusHunger > staminaMax)
 					bonusHunger = staminaMax;
-				dc.drawTexture(INTERFACE, posX, posY, 141, 148, (int) (110.0D * (bonusHunger / (double) staminaMax)), 12);
+				int colorPreview = offsetColor(this.settings.getIntValue(Settings.color_food), OFFSET_PREVIEW);
+				drawCustomBar(dc, posX, posY, width, 8, bonusHunger / (double) staminaMax * 100.0D, -1, -1, colorPreview, offsetColorPercent(colorPreview, OFFSET_PERCENT), false);
 			}
 		}
 
 		if (this.mc.player.hasStatusEffect(StatusEffects.HUNGER)) {
-			dc.drawTexture(INTERFACE, posX, posY, 141, 136, (int) (110.0D * (stamina / (double) staminaMax)), 12);
+			drawCustomBar(dc, posX, posY, width, 8, stamina / (double) staminaMax * 100.0D, -1, -1, this.settings.getIntValue(Settings.color_hunger), offsetColorPercent(this.settings.getIntValue(Settings.color_hunger), OFFSET_PERCENT), false);
 		} else {
-			dc.drawTexture(INTERFACE, posX, posY, 110, 100, (int) (110.0D * (stamina / (double) staminaMax)), 12);
+			drawCustomBar(dc, posX, posY, width, 8, stamina / (double) staminaMax * 100.0D, -1, -1, this.settings.getIntValue(Settings.color_food), offsetColorPercent(this.settings.getIntValue(Settings.color_food), OFFSET_PERCENT), false);
 		}
-		
 		String staminaString = this.settings.getBoolValue(Settings.hunger_percentage) ? (int) Math.floor((double) stamina / (double) staminaMax * 100) + "%" : stamina + "/" + staminaMax;
-		if (this.settings.getBoolValue(Settings.show_numbers_food))
-			dc.drawCenteredTextWithShadow( this.mc.textRenderer, staminaString, posX + 55, posY + 2, -1);
-		RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+		if (this.settings.getBoolValue(Settings.show_numbers_food)) {
+			dc.getMatrices().scale(0.5f, 0.5f, 0.5f);
+			dc.drawCenteredTextWithShadow( this.mc.textRenderer, staminaString, posX * 2 + width, posY * 2 + 4, -1);
+			dc.getMatrices().scale(2f, 2f, 2f);
+		}
 	}
 
 }

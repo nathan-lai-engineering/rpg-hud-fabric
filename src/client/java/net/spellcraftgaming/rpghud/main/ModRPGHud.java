@@ -11,10 +11,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.spellcraftgaming.rpghud.gui.hud.Hud;
 import net.spellcraftgaming.rpghud.gui.hud.HudDefault;
-import net.spellcraftgaming.rpghud.gui.hud.HudExtendedWidget;
-import net.spellcraftgaming.rpghud.gui.hud.HudFullTexture;
-import net.spellcraftgaming.rpghud.gui.hud.HudModern;
-import net.spellcraftgaming.rpghud.gui.hud.HudSimple;
 import net.spellcraftgaming.rpghud.gui.hud.HudVanilla;
 import net.spellcraftgaming.rpghud.settings.Settings;
 
@@ -38,12 +34,7 @@ public class ModRPGHud implements ClientModInitializer{
         instance = this;
 		this.settings = new Settings();
 		this.registerHud(new HudVanilla(MinecraftClient.getInstance(), "vanilla", "Vanilla"));
-		this.registerHud(new HudSimple(MinecraftClient.getInstance(), "simple", "Simplified"));
 		this.registerHud(new HudDefault(MinecraftClient.getInstance(), "default", "Default"));
-		this.registerHud(new HudExtendedWidget(MinecraftClient.getInstance(), "extended", "Extended Widget"));
-		this.registerHud(new HudFullTexture(MinecraftClient.getInstance(), "texture", "Full Texture"));
-		//this.registerHud(new HudHotbarWidget(MinecraftClient.getInstance(), "hotbar", "Hotbar Widget"));
-		this.registerHud(new HudModern(MinecraftClient.getInstance(), "modern", "Modern Style"));
 
 		if (!isHudKeyValid(this.settings.getStringValue(Settings.hud_type))) {
 			this.settings.setSetting(Settings.hud_type, "vanilla");
